@@ -6,18 +6,31 @@ import {
 } from "../types";
 import { FALLBACK_DASHBOARD, FALLBACK_SCHEMA } from "./fallbackData";
 
-// Dynamically resolve API URL across local, Vercel, and custom environments
+// Dynamically resolve API URL across local, Vercel Services (internal binding), and production
 const getApiBase = (): string => {
-  if (typeof process !== "undefined" && process.env.NEXT_PUBLIC_API_URL) {
-    return process.env.NEXT_PUBLIC_API_URL.replace(/\/$/, "");
-  }
+  // Client-side execution (browser)
   if (typeof window !== "undefined") {
-    // If running in browser on localhost:3000 with Vite/Next proxy, /api proxies to backend
+    // In local development, call the local backend port directly
     if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
       return "http://127.0.0.1:8008/api";
     }
+    // On Vercel / production public domain, use relative /api (routed by top-level rewrite)
     return "/api";
   }
+
+  // Server-side execution (Next.js server runtime / functions)
+  if (typeof process !== "undefined") {
+    // 1. Bound internal service URL injected by Vercel Services
+    if (process.env.BACKEND_URL) {
+      const cleanUrl = process.env.BACKEND_URL.replace(/\/$/, "");
+      return cleanUrl.endsWith("/api") ? cleanUrl : `${cleanUrl}/api`;
+    }
+    // 2. Custom public API URL
+    if (process.env.NEXT_PUBLIC_API_URL) {
+      return process.env.NEXT_PUBLIC_API_URL.replace(/\/$/, "");
+    }
+  }
+
   return "http://127.0.0.1:8008/api";
 };
 
@@ -38,10 +51,9 @@ export async function executeQuery(question: string, sessionId: string = "defaul
 
     return await res.json();
   } catch (err: any) {
-    // If backend is not reached, provide friendly guidance
     if (err.name === "TypeError" || err.message?.includes("fetch")) {
       throw new Error(
-        `Backend service unreachable at ${API_BASE}. To connect your live PostgreSQL database, ensure the FastAPI server is running on port 8008, or configure NEXT_PUBLIC_API_URL in your hosting environment.`
+        `Backend service unreachable at ${API_BASE}. To connect your live PostgreSQL database, ensure the FastAPI server is running on port 8008, or configure BACKEND_URL / NEXT_PUBLIC_API_URL.`
       );
     }
     throw err;
@@ -62,7 +74,6 @@ export async function fetchDashboard(): Promise<DashboardStats> {
   } catch (err) {
     console.warn("Backend offline or unreachable, serving cached dashboard data.", err);
   }
-  // Return authentic university analytics fallback
   return FALLBACK_DASHBOARD;
 }
 
@@ -79,7 +90,6 @@ export async function fetchSchema(): Promise<SchemaResponse> {
   } catch (err) {
     console.warn("Backend offline or unreachable, serving cached schema data.", err);
   }
-  // Return authentic university schema fallback
   return FALLBACK_SCHEMA;
 }
 

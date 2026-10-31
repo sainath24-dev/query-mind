@@ -5,6 +5,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   async rewrites() {
+    // In local development or runtime proxy, rewrite /api to the backend
     const backendUrl = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL;
     if (!backendUrl) {
       return [];

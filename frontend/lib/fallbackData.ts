@@ -166,3 +166,4 @@ export const FALLBACK_SCHEMA: SchemaResponse = {
     { source_table: "marks", source_column: "student_id", target_table: "students", target_column: "student_id", display: "marks.student_id -> students.student_id" }
   ]
 };
+

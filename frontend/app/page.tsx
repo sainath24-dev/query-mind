@@ -127,7 +127,6 @@ export default function Home() {
         activeTab={activeTab}
         onTabChange={setActiveTab}
         onNewChat={handleNewChat}
-        totalRecords={dashboardStats?.total_students ? 135188 : 135188}
       />
 
       {/* Main View Area */}

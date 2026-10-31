@@ -7,6 +7,7 @@ interface NavbarProps {
   activeTab: "chat" | "architecture" | "schema" | "dashboard";
   onTabChange: (tab: "chat" | "architecture" | "schema" | "dashboard") => void;
   onNewChat: () => void;
+  totalRecords?: number;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({

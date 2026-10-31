@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import { MessageSquare, Database, BarChart3, Plus } from "lucide-react";
+import { MessageSquare, Database, BarChart3, Plus, Cpu } from "lucide-react";
 
 interface NavbarProps {
-  activeTab: "chat" | "schema" | "dashboard";
-  onTabChange: (tab: "chat" | "schema" | "dashboard") => void;
+  activeTab: "chat" | "architecture" | "schema" | "dashboard";
+  onTabChange: (tab: "chat" | "architecture" | "schema" | "dashboard") => void;
   onNewChat: () => void;
 }
 
@@ -46,6 +46,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="flex items-center space-x-2">
           <h1 className="text-[20px] font-semibold tracking-[-0.015em] text-[#1d1d1f]">
             {activeTab === "chat" && "Chat"}
+            {activeTab === "architecture" && "Architecture"}
             {activeTab === "schema" && "Schema"}
             {activeTab === "dashboard" && "Dashboard"}
           </h1>
@@ -55,7 +56,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         <nav className="flex items-center bg-[#e8e8ed] p-1 rounded-full text-[13px]">
           <button
             onClick={() => onTabChange("chat")}
-            className={`flex items-center space-x-1.5 px-4 py-1.5 rounded-full font-normal transition-all duration-150 ${
+            className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full font-normal transition-all duration-150 ${
               activeTab === "chat"
                 ? "bg-[#ffffff] text-[#1d1d1f] shadow-[0_1px_3px_rgba(0,0,0,0.08)] font-medium"
                 : "text-[#7a7a7a] hover:text-[#1d1d1f]"
@@ -66,8 +67,20 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
 
           <button
+            onClick={() => onTabChange("architecture")}
+            className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full font-normal transition-all duration-150 ${
+              activeTab === "architecture"
+                ? "bg-[#ffffff] text-[#1d1d1f] shadow-[0_1px_3px_rgba(0,0,0,0.08)] font-medium"
+                : "text-[#7a7a7a] hover:text-[#1d1d1f]"
+            }`}
+          >
+            <Cpu className="w-3.5 h-3.5" />
+            <span>Architecture</span>
+          </button>
+
+          <button
             onClick={() => onTabChange("schema")}
-            className={`flex items-center space-x-1.5 px-4 py-1.5 rounded-full font-normal transition-all duration-150 ${
+            className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full font-normal transition-all duration-150 ${
               activeTab === "schema"
                 ? "bg-[#ffffff] text-[#1d1d1f] shadow-[0_1px_3px_rgba(0,0,0,0.08)] font-medium"
                 : "text-[#7a7a7a] hover:text-[#1d1d1f]"
@@ -79,7 +92,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <button
             onClick={() => onTabChange("dashboard")}
-            className={`flex items-center space-x-1.5 px-4 py-1.5 rounded-full font-normal transition-all duration-150 ${
+            className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full font-normal transition-all duration-150 ${
               activeTab === "dashboard"
                 ? "bg-[#ffffff] text-[#1d1d1f] shadow-[0_1px_3px_rgba(0,0,0,0.08)] font-medium"
                 : "text-[#7a7a7a] hover:text-[#1d1d1f]"

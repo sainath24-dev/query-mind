@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Navbar } from "../components/Navbar";
 import { ChatInterface, ChatMessage } from "../components/ChatInterface";
 import { SchemaExplorerView } from "../components/SchemaExplorerView";
+import { ArchitectureView } from "../components/ArchitectureView";
 import { DashboardView } from "../components/DashboardView";
 import {
   QueryResponse,
@@ -18,7 +19,7 @@ import {
 import { Loader2 } from "lucide-react";
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<"chat" | "schema" | "dashboard">("chat");
+  const [activeTab, setActiveTab] = useState<"chat" | "architecture" | "schema" | "dashboard">("chat");
   const [isLoading, setIsLoading] = useState(false);
 
   // Conversational session ID
@@ -140,7 +141,14 @@ export default function Home() {
           />
         )}
 
-        {/* Tab 2: Ultra-Simple Schema Explorer */}
+        {/* Tab 2: End-to-End Pipeline Architecture & How It Works */}
+        {activeTab === "architecture" && (
+          <ArchitectureView
+            onSelectQuery={handleQueryFromOtherView}
+          />
+        )}
+
+        {/* Tab 3: Ultra-Simple Schema Explorer */}
         {activeTab === "schema" && (
           schemaData ? (
             <SchemaExplorerView
